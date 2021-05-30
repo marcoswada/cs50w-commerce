@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <h2>Listing {{ listing.id }}: {{ listing.title }}</h2>
+        <div>
+            <p><b>Category:</b> {{ listing.category }}</p>
+            <p><b>Listed by:</b> {{ listing.owner }}</p>
+            <p><b>Date:</b> {{ listing.creationDate }}</p>
+            <img src={{ listing.picture.url }}>
+            <p>{{ listing.picture.url }}</p>
+            <h3>Description:</h3>
+            <p>{{ listing.description }}</p>
+            <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>
+            <p><b>Current price:</b> ${{ listing.currentPrice }}</p>
+            
+        </div>
+    {% endif %}
+{% endblock %}
