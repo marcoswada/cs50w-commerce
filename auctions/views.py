@@ -3,9 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+import datetime
 
 from auctions.models import User, Listing
-from auctions.forms import ListingForm
+from auctions.forms import ListingForm, ListingForm2
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -71,10 +72,9 @@ def listing(request, listing_id):
 
 def create(request):
     if (request.method == "POST" ):
-        form=ListingForm(request.POST)
+        form=ListingForm2(request.POST)
         if form.is_valid():
-            xReq = form.cleaned_data['active']
-
+            # xReq = form.cleaned_data['active']
             xReq = Listing.objects.create()
             xReq.active = form.cleaned_data['active']
             xReq.title = form.cleaned_data['title']
@@ -82,6 +82,9 @@ def create(request):
             xReq.description = form.cleaned_data['description']
             xReq.initialPrice = form.cleaned_data['initialPrice']
             xReq.currentPrice = form.cleaned_data['currentPrice']
+            xReq.creationDate = datetime.date()
+            xReq.owner = 'teste' # user name
+
             xReq.save()
         else:
             return render(request, "auctions/create.html", {
@@ -90,5 +93,5 @@ def create(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, "auctions/create.html", {
-            "form": ListingForm,
+            "form": ListingForm2,
         })
