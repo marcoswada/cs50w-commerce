@@ -28,7 +28,7 @@ class ListingForm(forms.Form):
         data = self.cleaned_data['description']
         return data
 
-class ListingForm2(forms.ModelForm):
+class ListingForm2(ModelForm):
 
     class Meta:
         model = Listing
