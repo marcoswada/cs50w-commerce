@@ -74,7 +74,7 @@ def create(request):
 
     print('\n\n\ncreate(\'request\')\n\n\n')
     if (request.method == "POST" ):
-        form=ListingForm2(request.POST)
+        form=ListingForm2(request.POST, request.FILES)
         print ("form.isvalid(): ", form.is_valid())
         if form.is_valid():
             # xReq = form.cleaned_data['active']
