@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from auctions.models import Listing
+from auctions.models import Listing, Category
 
 class ListingForm(forms.Form):
     active = forms.BooleanField(label="Active", required=False, initial=True)
@@ -13,6 +13,7 @@ class ListingForm(forms.Form):
     title = forms.CharField(max_length=70)
     picture = forms.ImageField(label="Picture", required = False)
     description = forms.CharField(max_length=255)
+    category = forms.ModelChoiceField(queryset=Category.objects)
     initialPrice = forms.DecimalField(label="Initial price", max_digits=10, decimal_places=2 )
     currentPrice = forms.DecimalField(label="Current price", max_digits=10, decimal_places=2,initial=initialPrice )
 

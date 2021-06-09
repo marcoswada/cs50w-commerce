@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -6,7 +6,7 @@ from django.urls import reverse
 import datetime
 
 from auctions.models import User, Listing
-from auctions.forms import ListingForm, ListingForm2
+from auctions.forms import ListingForm
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -71,22 +71,9 @@ def listing(request, listing_id):
     })
 
 def create(request):
-
-    print('\n\n\ncreate(\'request\')\n\n\n')
     if (request.method == "POST" ):
-        form=ListingForm2(request.POST, request.FILES)
-        print ("form.isvalid(): ", form.is_valid())
+        form=ListingForm(request.POST, request.FILES)
         if form.is_valid():
-            # xReq = form.cleaned_data['active']
-            print ("\n\n\n")
-            print('active: ', form.cleaned_data['active'])
-            print('title: ', form.cleaned_data['title'])
-            print('description: ', form.cleaned_data['description'])
-            print('initialPrice: ',form.cleaned_data['initialPrice'])
-            print('picture: ', form.cleaned_data.get('picture'))
-            print('picture: ', form.cleaned_data['picture'])
-            print ("\n\n\n")
-            xOwner = User.objects.get(pk=1)
             xReq = Listing()
             xReq.active = form.cleaned_data['active']
             xReq.title = form.cleaned_data['title']
@@ -94,11 +81,10 @@ def create(request):
             xReq.description = form.cleaned_data['description']
             xReq.initialPrice = form.cleaned_data['initialPrice']
             xReq.currentPrice = form.cleaned_data['currentPrice']
-            xReq.creationDate = datetime.date.today()
+            xReq.creationDate = datetime.datetime.now()
             xReq.category = form.cleaned_data['category']
-            xReq.owner = xOwner # user name
+            xReq.owner = User.objects.get(username=get_user(request))
             xReq.save()
-
         else:
             return render(request, "auctions/create.html", {
                 "form": form
@@ -106,5 +92,5 @@ def create(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, "auctions/create.html", {
-            "form": ListingForm2,
+            "form": ListingForm,
         })
