@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Teste SVG</title>
+</head>
+<body>
+    <div>
+        <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+            <rect width="10" height="10">
+                <animate attributeName="rx" values="0;5;0" dur="10s" repeatCount="indefinite" />
+            </rect>
+        </svg>
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Example of a polygon with the default fill -->
+            <polygon points="0,100 50,25 50,75 100,0" />
+          
+            <!-- Example of the same polygon shape with stroke and no fill -->
+            <polygon points="100,100 150,25 150,75 200,0"
+                      fill="none" stroke="black" />
+
+        </svg>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="0,100 10,10 20,0" fill="white" stroke="black" />
+        </svg>  
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <polygon fill="#1D1D1B" stroke="#1D1D1B" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+                259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 
+                29.274,197.007 188.165,173.919 "/>
+        </svg>
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <polygon fill="#FFFF00" stroke="#1D1D1B" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+                259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 
+                29.274,197.007 188.165,173.919 " pathLength="100">
+                <animate attributeName="pathLength" values="0;100;0" dur="5s" repeatCount="indefinite" />
+            </polygon>
+        </svg>
+</div>
+</body>
+</html>
