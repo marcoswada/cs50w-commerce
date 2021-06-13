@@ -9,11 +9,35 @@
             <p><b>Date:</b> {{ listing.creationDate }}</p>
             <img src={{ listing.picture.url }}>
             <p>{{ listing.picture.url }}</p>
+            <embed src="/static/auctions/star1.svg" width="30px" height="30px" usemap="#teste"/>
+            <img src="" alt="" srcset="" width="30" height="30" usemap="#teste" />
+            <map name="teste">
+                <area shape="circle" coords="15,15,7" href="#" alt="">
+            </map>
             <h3>Description:</h3>
             <p>{{ listing.description }}</p>
             <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>
             <p><b>Current price:</b> ${{ listing.currentPrice }}</p>
             
+        </div>
+        <hr>
+        <div>
+            <h5>Comments:</h5>
+            <form action="" method="post">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+            <hr>
+            {% for comment in comments %}
+                <div>
+                    <b>{{ comment.user }}</b><i>({{ comment.timestamp }})</i>:
+                    <p>{{ comment.comment }}</p>
+                </div>
+                <hr>
+            {% endfor %}
         </div>
     {% endif %}
 {% endblock %}

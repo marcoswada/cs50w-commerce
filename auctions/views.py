@@ -1,12 +1,12 @@
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 import datetime
 
-from auctions.models import User, Listing
-from auctions.forms import ListingForm
+from auctions.models import User, Listing, Comment
+from auctions.forms import ListingForm, CommentForm
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -66,8 +66,30 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def listing(request, listing_id):
-    return render(request, "auctions/listing.html",{
-        "listing": Listing.objects.get(id=listing_id),
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            obj=Comment()
+            obj.item = Listing.objects.get(pk=listing_id)
+            obj.user = get_user(request)
+            obj.comment = form.cleaned_data['comment']
+            obj.save()
+            #return HttpResponseRedirect(reverse('listing',listing_id))
+            return render(request, "auctions/listing.html", context={
+                "listing": Listing.objects.get(pk=listing_id),
+                "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
+                "form": CommentForm(),
+            })
+        else:
+            return render(request, "auctions/listing.html", context={ 
+                "listing": Listing.objects.get(id=listing_id),
+                "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
+                "form": form, })
+    else:
+        return render(request, "auctions/listing.html",{
+            "listing": Listing.objects.get(id=listing_id),
+            "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
+            "form": CommentForm(),
     })
 
 def create(request):

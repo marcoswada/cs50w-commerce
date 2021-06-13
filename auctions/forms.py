@@ -36,3 +36,6 @@ class ListingForm2(ModelForm):
         fields = ['active', 'title', 'picture', 'description', 'category', 'initialPrice', 'currentPrice']
         labels = {'active': _('Active')}
         help_texts = {'active': _('Listing status')}
+
+class CommentForm(forms.Form):
+    comment = forms.CharField(max_length=255)

@@ -38,7 +38,8 @@ class Bid(models.Model):
 class Comment(models.Model):
     item = models.ForeignKey(Listing, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    comment = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    comment = models.CharField(max_length=255, blank=False, null=False)
     def __str__(self):
         return(f"({ self.id }) { self.item } { self.user }: { self.comment }")
 
