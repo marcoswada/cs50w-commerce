@@ -2,18 +2,16 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <h2>Listing {{ listing.id }}: {{ listing.title }}</h2>
+        <h2>
+            Listing {{ listing.id }}: {{ listing.title }}
+            <a href="{% url 'watch' listing.id %}"><img src={% if starred %} "/static/auctions/star-on.svg" {% else %} "/static/auctions/star-off.svg" {% endif %} width="30px" height="30px"/></a>
+        </h2>
         <div>
             <p><b>Category:</b> {{ listing.category }}</p>
             <p><b>Listed by:</b> {{ listing.owner }}</p>
             <p><b>Date:</b> {{ listing.creationDate }}</p>
             <img src={{ listing.picture.url }}>
             <p>{{ listing.picture.url }}</p>
-            <embed src="/static/auctions/star1.svg" width="30px" height="30px" usemap="#teste"/>
-            <img src="" alt="" srcset="" width="30" height="30" usemap="#teste" />
-            <map name="teste">
-                <area shape="circle" coords="15,15,7" href="#" alt="">
-            </map>
             <h3>Description:</h3>
             <p>{{ listing.description }}</p>
             <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>

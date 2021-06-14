@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 import datetime
 
-from auctions.models import User, Listing, Comment
+from auctions.models import User, Listing, Comment, Watchlist
 from auctions.forms import ListingForm, CommentForm
 
 def index(request):
@@ -74,22 +74,31 @@ def listing(request, listing_id):
             obj.user = get_user(request)
             obj.comment = form.cleaned_data['comment']
             obj.save()
-            #return HttpResponseRedirect(reverse('listing',listing_id))
+            isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+            starred = (isWatched.count()>0)
             return render(request, "auctions/listing.html", context={
                 "listing": Listing.objects.get(pk=listing_id),
                 "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
                 "form": CommentForm(),
+                "starred": starred,
             })
         else:
+            isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+            starred = (isWatched.count()>0)
             return render(request, "auctions/listing.html", context={ 
                 "listing": Listing.objects.get(id=listing_id),
                 "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
-                "form": form, })
+                "form": form,
+                "starred": starred,
+                 })
     else:
+        isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+        starred = (isWatched.count()>0)
         return render(request, "auctions/listing.html",{
             "listing": Listing.objects.get(id=listing_id),
             "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
             "form": CommentForm(),
+            "starred": starred,
     })
 
 def create(request):
@@ -116,3 +125,22 @@ def create(request):
         return render(request, "auctions/create.html", {
             "form": ListingForm,
         })
+
+def watch(request, listing_id):
+    usr=get_user(request)
+    lst=Listing.objects.get(pk=listing_id)
+    wtc=Watchlist.objects.filter(user__exact=usr,item__exact=lst)
+    if wtc.count()>0:
+        wtc.delete()
+    else:
+        wtc=Watchlist.objects.create(user=usr, item=lst)
+        wtc.save()
+
+    print(listing_id)
+    return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+
+def mylistings(request):
+    pass
+
+def watchlist(request):
+    pass
