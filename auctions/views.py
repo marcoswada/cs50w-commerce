@@ -10,9 +10,26 @@ from auctions.forms import ListingForm, CommentForm
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all,
+        "listings": Listing.objects.filter(active__exact=True),
+        "title": "Active Listings",
         })
 
+def mylistings(request):
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.filter(owner__exact=get_user(request)),
+        "title": "My Listings",
+    })
+
+
+def watchlist(request):
+    wtc=Watchlist.objects.filter(user__exact=get_user(request))
+    items=[]
+    for it in wtc:
+        items.append(it.item.id)
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.filter(pk__in=items),
+        "title": "My Watchlist",
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -139,8 +156,3 @@ def watch(request, listing_id):
     print(listing_id)
     return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
 
-def mylistings(request):
-    pass
-
-def watchlist(request):
-    pass
