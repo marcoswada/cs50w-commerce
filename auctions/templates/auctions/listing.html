@@ -16,7 +16,21 @@
             <p>{{ listing.description }}</p>
             <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>
             <p><b>Current price:</b> ${{ listing.currentPrice }}</p>
-            
+        </div>
+        <hr>
+        <div>
+            {% if isowner %}
+                <form action="{%url 'finish' %}" method="post">
+                    {% csfr_token %}
+                    <input type="button" value="Finish auction">
+                </form>
+            {% else %}
+                <form action="{%url 'bid' %}" method="post">
+                    {% csfr_token %}
+                    {{ form }}
+                    <input type="submit" value="Bid">
+                </form>
+            {% endif %}
         </div>
         <hr>
         <div>

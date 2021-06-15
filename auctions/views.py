@@ -156,3 +156,8 @@ def watch(request, listing_id):
     print(listing_id)
     return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
 
+def finish(request):
+    pass
+
+def bid(request):
+    pass

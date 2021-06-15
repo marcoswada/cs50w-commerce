@@ -39,3 +39,7 @@ class ListingForm2(ModelForm):
 
 class CommentForm(forms.Form):
     comment = forms.CharField(max_length=255)
+
+class BidForm(forms.Form):
+    value = forms.DecimalField(label="Bid value", max_digits=10, decimal_places=2 )
+    
