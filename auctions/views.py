@@ -83,6 +83,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def listing(request, listing_id):
+    starred=Listing.objects.get(pk=listing_id).WatchedBy.get(pk=get_user(request)).count()>0
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -91,31 +92,37 @@ def listing(request, listing_id):
             obj.user = get_user(request)
             obj.comment = form.cleaned_data['comment']
             obj.save()
-            isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-            starred = (isWatched.count()>0)
+            #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+            #starred = (isWatched.count()>0)
+            isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
             return render(request, "auctions/listing.html", context={
                 "listing": Listing.objects.get(pk=listing_id),
                 "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
                 "form": CommentForm(),
                 "starred": starred,
+                "isowner": isowner,
             })
         else:
-            isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-            starred = (isWatched.count()>0)
+            #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+            #starred = (isWatched.count()>0)
+            isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
             return render(request, "auctions/listing.html", context={ 
                 "listing": Listing.objects.get(id=listing_id),
                 "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
                 "form": form,
                 "starred": starred,
+                "isowner": isowner,
                  })
     else:
-        isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-        starred = (isWatched.count()>0)
+        #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
+        #starred = (isWatched.count()>0)
+        isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
         return render(request, "auctions/listing.html",{
             "listing": Listing.objects.get(id=listing_id),
             "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
             "form": CommentForm(),
             "starred": starred,
+            "isowner": isowner,
     })
 
 def create(request):
