@@ -19,7 +19,7 @@
         </div>
         <hr>
         <div>
-                              {% if isowner %}
+            {% if isowner %}
                 <form action="{%url 'finish' %}" method="post">
                     {% csfr_token %}
                     <input type="button" value="Finish auction">
