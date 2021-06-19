@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.urls import reverse
 import datetime
 
-from auctions.models import User, Listing, Comment, Watchlist
-from auctions.forms import ListingForm, CommentForm
+from auctions.models import User, Listing, Comment, Bid
+from auctions.forms import ListingForm, CommentForm, BidForm
 
 def index(request):
     return render(request, "auctions/index.html", {
@@ -22,12 +23,8 @@ def mylistings(request):
 
 
 def watchlist(request):
-    wtc=Watchlist.objects.filter(user__exact=get_user(request))
-    items=[]
-    for it in wtc:
-        items.append(it.item.id)
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(pk__in=items),
+        "listings": Listing.objects.filter(watchedBy__in=[User.objects.get(username__exact=get_user(request)),]),
         "title": "My Watchlist",
     })
 
@@ -83,7 +80,9 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def listing(request, listing_id):
-    starred=Listing.objects.get(pk=listing_id).WatchedBy.get(pk=get_user(request)).count()>0
+    usr=User.objects.get(username__exact=get_user(request))
+    starred=usr in Listing.objects.get(pk=listing_id).watchedBy.all()
+    isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -92,37 +91,24 @@ def listing(request, listing_id):
             obj.user = get_user(request)
             obj.comment = form.cleaned_data['comment']
             obj.save()
-            #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-            #starred = (isWatched.count()>0)
-            isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
-            return render(request, "auctions/listing.html", context={
-                "listing": Listing.objects.get(pk=listing_id),
-                "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
-                "form": CommentForm(),
-                "starred": starred,
-                "isowner": isowner,
-            })
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
-            #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-            #starred = (isWatched.count()>0)
-            isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
             return render(request, "auctions/listing.html", context={ 
                 "listing": Listing.objects.get(id=listing_id),
                 "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
                 "form": form,
                 "starred": starred,
                 "isowner": isowner,
+                "bidform": BidForm(listing_id),
                  })
     else:
-        #isWatched = Watchlist.objects.filter(user__exact=get_user(request), item__exact=listing_id)
-        #starred = (isWatched.count()>0)
-        isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
         return render(request, "auctions/listing.html",{
             "listing": Listing.objects.get(id=listing_id),
             "comments": Comment.objects.filter(item__exact=listing_id).order_by("-timestamp"),
-            "form": CommentForm(),
+            "form": CommentForm,
             "starred": starred,
             "isowner": isowner,
+            "bidform": BidForm(listing_id),
     })
 
 def create(request):
@@ -151,20 +137,28 @@ def create(request):
         })
 
 def watch(request, listing_id):
-    usr=get_user(request)
+    usr=User.objects.get(username__exact=get_user(request))
     lst=Listing.objects.get(pk=listing_id)
-    wtc=Watchlist.objects.filter(user__exact=usr,item__exact=lst)
-    if wtc.count()>0:
-        wtc.delete()
+    if usr in lst.watchedBy.all():
+        lst.watchedBy.remove(usr)
     else:
-        wtc=Watchlist.objects.create(user=usr, item=lst)
-        wtc.save()
-
-    print(listing_id)
+        lst.watchedBy.add(usr)
     return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
 
-def finish(request):
+def finish(request, listing_id):
     pass
 
-def bid(request):
-    pass
+def bid(request, listing_id):
+    if request.method=='POST':
+        form=BidForm(request.POST)
+        if form.is_valid():
+            x=Bid()
+            x.bidDate=datetime.datetime.now()
+            x.bidder=User.objects.get(username__exact=get_user(request))
+            x.item=Listing.objects.get(pk=listing_id)
+            x.value=form.cleaned_data['value']
+            x.save()
+        else:
+            return HttpResponse("Invalid form")
+    else:
+        return HttpResponse ("GET")

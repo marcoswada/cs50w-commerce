@@ -42,4 +42,14 @@ class CommentForm(forms.Form):
 
 class BidForm(forms.Form):
     value = forms.DecimalField(label="Bid value", max_digits=10, decimal_places=2 )
-    
+    def __init__(self,listing_id,*args,**kwargs):
+        #self.listing_id = kwargs.pop('listing_id')
+        super(BidForm,self).__init__(*args,**kwargs)
+
+    def clean_value(self):
+        data=self.cleaned_data['value']
+        lst=Listing.objects.get(pk=self.listing_id)
+        curVal=lst.currentPrice
+        if data<=curVal:
+            raise ValidationError(_("Your bid is lower than the current price"))
+        return data

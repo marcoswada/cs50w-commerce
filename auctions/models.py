@@ -43,6 +43,6 @@ class Comment(models.Model):
     def __str__(self):
         return(f"({ self.id }) { self.item } { self.user }: { self.comment }")
 
-class Watchlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    item = models.ForeignKey(Listing, on_delete=models.PROTECT)
+#class Watchlist(models.Model):
+#    user = models.ForeignKey(User, on_delete=models.PROTECT)
+#    item = models.ForeignKey(Listing, on_delete=models.PROTECT)

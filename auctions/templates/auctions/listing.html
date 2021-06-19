@@ -20,14 +20,13 @@
         <hr>
         <div>
             {% if isowner %}
-                <form action="{%url 'finish' %}" method="post">
-                    {% csfr_token %}
-                    <input type="button" value="Finish auction">
-                </form>
+                <a href="{% url 'finish' listing.id %}">Finish auction</a>
             {% else %}
-                <form action="{%url 'bid' %}" method="post">
-                    {% csfr_token %}
-                    {{ bidform }}
+                <form action="{%url 'bid' listing.id%}" method="post">
+                    {% csrf_token %}
+                    <table>
+                        {{ bidform.as_table }}
+                    </table>
                     <input type="submit" value="Bid">
                 </form>
             {% endif %}
