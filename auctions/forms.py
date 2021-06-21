@@ -1,4 +1,4 @@
-
+[]
 from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
@@ -42,12 +42,16 @@ class CommentForm(forms.Form):
 
 class BidForm(forms.Form):
     value = forms.DecimalField(label="Bid value", max_digits=10, decimal_places=2 )
+    #overwrite __init__
     def __init__(self,listing_id,*args,**kwargs):
-        #self.listing_id = kwargs.pop('listing_id')
+        #super().__init__(*args,**kwargs)
+        self.listing_id = kwargs.get('listing_id')
         super(BidForm,self).__init__(*args,**kwargs)
 
     def clean_value(self):
         data=self.cleaned_data['value']
+        print('\n\n\nlisting_id:\n')
+        print (self.listing_id)
         lst=Listing.objects.get(pk=self.listing_id)
         curVal=lst.currentPrice
         if data<=curVal:

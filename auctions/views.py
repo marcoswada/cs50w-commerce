@@ -150,7 +150,7 @@ def finish(request, listing_id):
 
 def bid(request, listing_id):
     if request.method=='POST':
-        form=BidForm(request.POST)
+        form=BidForm(listing_id, request.POST)
         if form.is_valid():
             x=Bid()
             x.bidDate=datetime.datetime.now()
