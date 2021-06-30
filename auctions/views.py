@@ -146,7 +146,7 @@ def watch(request, listing_id):
     return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
 
 def finish(request, listing_id):
-    pass
+    return HttpResponse("not implemented yet")
 
 def bid(request, listing_id):
     if request.method=='POST':

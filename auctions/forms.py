@@ -1,7 +1,7 @@
-[]
 from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from auctions.models import Listing, Category
@@ -52,7 +52,7 @@ class BidForm(forms.Form):
         data=self.cleaned_data['value']
         print('\n\n\nlisting_id:\n')
         print (self.listing_id)
-        lst=Listing.objects.get(pk=self.listing_id)
+        lst=get_object_or_404(Listing,pk=self.listing_id) # Listing.objects.get(pk=self.listing_id)
         curVal=lst.currentPrice
         if data<=curVal:
             raise ValidationError(_("Your bid is lower than the current price"))
