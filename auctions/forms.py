@@ -45,15 +45,17 @@ class BidForm(forms.Form):
     #overwrite __init__
     def __init__(self,listing_id,*args,**kwargs):
         #super().__init__(*args,**kwargs)
-        self.listing_id = kwargs.get('listing_id')
+        self.listing_id = listing_id #kwargs.get('listing_id')
         super(BidForm,self).__init__(*args,**kwargs)
 
     def clean_value(self):
         data=self.cleaned_data['value']
-        print('\n\n\nlisting_id:\n')
-        print (self.listing_id)
+        print('\n\n\nlisting_id: ', self.listing_id)
         lst=get_object_or_404(Listing,pk=self.listing_id) # Listing.objects.get(pk=self.listing_id)
         curVal=lst.currentPrice
+        print('currentPrice: ', curVal)
+        print('data: ', data)
+        print ('\n\n\n')
         if data<=curVal:
             raise ValidationError(_("Your bid is lower than the current price"))
         return data

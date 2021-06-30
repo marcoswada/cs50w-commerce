@@ -158,6 +158,7 @@ def bid(request, listing_id):
             x.item=Listing.objects.get(pk=listing_id)
             x.value=form.cleaned_data['value']
             x.save()
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
             return HttpResponse("Invalid form")
     else:
