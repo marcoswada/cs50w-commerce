@@ -22,6 +22,7 @@
             {% if isowner %}
                 <a href="{% url 'finish' listing.id %}">Finish auction</a>
             {% else %}
+                {% if error_messsage %}{{ error_messsage }}{% endif %}
                 <form action="{%url 'bid' listing.id%}" method="post">
                     {% csrf_token %}
                     <table>
@@ -35,7 +36,6 @@
                     <b>{{ bid.bidder }}</b><i>({{ bid.bidDate }})</i>:
                     <p>{{ bid.value }}</p>
                 </div>
-                <hr>
             {% endfor %}
     </div>
         <hr>

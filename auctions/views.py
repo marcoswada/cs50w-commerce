@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.db import IntegrityError
+from django.db.utils import Error
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import HttpResponseServerError
 from django.shortcuts import redirect, render
@@ -79,7 +80,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def listing(request, listing_id):
+def listing(request, listing_id, ):
     usr=User.objects.get(username__exact=get_user(request))
     starred=usr in Listing.objects.get(pk=listing_id).watchedBy.all()
     isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
@@ -165,6 +166,5 @@ def bid(request, listing_id):
             lst.save()
             return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
-            return HttpResponse("Invalid form")
-    else:
-        return HttpResponse ("GET")
+            # need to insert an error message here (invalid bid)
+            return HttpResponseRedirect(reverse('listing', args=(listing_id,)))
