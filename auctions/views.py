@@ -100,6 +100,7 @@ def listing(request, listing_id):
                 "starred": starred,
                 "isowner": isowner,
                 "bidform": BidForm(listing_id),
+                "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
                  })
     else:
         return render(request, "auctions/listing.html",{
@@ -109,6 +110,7 @@ def listing(request, listing_id):
             "starred": starred,
             "isowner": isowner,
             "bidform": BidForm(listing_id),
+            "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
     })
 
 def create(request):
@@ -158,6 +160,9 @@ def bid(request, listing_id):
             x.item=Listing.objects.get(pk=listing_id)
             x.value=form.cleaned_data['value']
             x.save()
+            lst=Listing.objects.get(pk=listing_id)
+            lst.currentPrice=form.cleaned_data['value']
+            lst.save()
             return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
             return HttpResponse("Invalid form")

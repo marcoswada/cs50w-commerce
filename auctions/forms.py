@@ -41,7 +41,9 @@ class CommentForm(forms.Form):
     comment = forms.CharField(max_length=255)
 
 class BidForm(forms.Form):
-    value = forms.DecimalField(label="Bid value", max_digits=10, decimal_places=2 )
+    #lst=get_object_or_404(Listing,pk=self.listing_id) # Listing.objects.get(pk=self.listing_id)
+    #curVal=lst.currentPrice + 0.01
+    value = forms.DecimalField(label="Bid value", max_digits=10, decimal_places=2,  )
     #overwrite __init__
     def __init__(self,listing_id,*args,**kwargs):
         #super().__init__(*args,**kwargs)
@@ -50,12 +52,8 @@ class BidForm(forms.Form):
 
     def clean_value(self):
         data=self.cleaned_data['value']
-        print('\n\n\nlisting_id: ', self.listing_id)
         lst=get_object_or_404(Listing,pk=self.listing_id) # Listing.objects.get(pk=self.listing_id)
         curVal=lst.currentPrice
-        print('currentPrice: ', curVal)
-        print('data: ', data)
-        print ('\n\n\n')
         if data<=curVal:
             raise ValidationError(_("Your bid is lower than the current price"))
         return data

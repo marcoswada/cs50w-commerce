@@ -30,7 +30,14 @@
                     <input type="submit" value="Bid">
                 </form>
             {% endif %}
-        </div>
+            {% for bid in bids %}
+                <div>
+                    <b>{{ bid.bidder }}</b><i>({{ bid.bidDate }})</i>:
+                    <p>{{ bid.value }}</p>
+                </div>
+                <hr>
+            {% endfor %}
+    </div>
         <hr>
         <div>
             <h5>Comments:</h5>
