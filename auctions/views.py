@@ -84,6 +84,7 @@ def listing(request, listing_id, ):
     usr=User.objects.get(username__exact=get_user(request))
     starred=usr in Listing.objects.get(pk=listing_id).watchedBy.all()
     isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
+    message=request.GET.get('message', None)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -102,6 +103,7 @@ def listing(request, listing_id, ):
                 "isowner": isowner,
                 "bidform": BidForm(listing_id),
                 "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
+                "message": message,
                  })
     else:
         return render(request, "auctions/listing.html",{
@@ -112,6 +114,7 @@ def listing(request, listing_id, ):
             "isowner": isowner,
             "bidform": BidForm(listing_id),
             "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
+            "message": message,
     })
 
 def create(request):
@@ -156,8 +159,10 @@ def finish(request, listing_id):
             lst.save()
             return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
-            # can't finish someone else auction
-            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+            # can't finish someone else's auction
+            message="You can't finish someone else's auction"
+            print ("You can't finish someone else's auction")
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,))+'?message='+message)
 
     #return HttpResponse("not implemented yet")
 
@@ -177,4 +182,6 @@ def bid(request, listing_id):
             return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
             # need to insert an error message here (invalid bid)
-            return HttpResponseRedirect(reverse('listing', args=(listing_id,)))
+            print("\n\n\nInvalid bid\n\n\n")
+            message="Your bid is lower than the current price"
+            return HttpResponseRedirect(reverse('listing', args=(listing_id,))+'?message='+message)
