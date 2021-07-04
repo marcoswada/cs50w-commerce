@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.db.utils import Error
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import HttpResponseServerError
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 import datetime
 
@@ -149,7 +149,17 @@ def watch(request, listing_id):
     return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
 
 def finish(request, listing_id):
-    return HttpResponse("not implemented yet")
+    if request.method=='GET':
+        lst=get_object_or_404(Listing, pk=listing_id)
+        if get_user(request)==lst.owner:
+            lst.active=False
+            lst.save()
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+        else:
+            # can't finish someone else auction
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+
+    #return HttpResponse("not implemented yet")
 
 def bid(request, listing_id):
     if request.method=='POST':
