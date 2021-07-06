@@ -19,7 +19,11 @@
         </div>
         <hr>
         <div>
-            <h3>{% if messsage %}{{ messsage }}{% endif %}</h3>
+            {% if message %}
+                <h5>
+                    {{ message }}
+                </h5>
+            {% endif %}
             {% if isowner %}
                 <a href="{% url 'finish' listing.id %}">Finish auction</a>
             {% else %}
