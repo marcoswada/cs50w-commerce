@@ -93,7 +93,7 @@ def listing(request, listing_id, ):
             obj.user = get_user(request)
             obj.comment = form.cleaned_data['comment']
             obj.save()
-            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,))+"#comments")
         else:
             return render(request, "auctions/listing.html", context={ 
                 "listing": Listing.objects.get(id=listing_id),
