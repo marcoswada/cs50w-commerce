@@ -20,14 +20,27 @@
         <hr>
         <div>
             {% if message %}
-                <h5>
-                    {{ message }}
-                </h5>
+                <script>
+                    $(document).ready(function(){
+
+                        //var x=document.getElementById("msgToast");
+                        //x.toast('show');
+                        $("#msgToast").toast('show');
+                    });
+                </script>
+                <div id="msgToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
             {% endif %}
             {% if isowner %}
                 <a href="{% url 'finish' listing.id %}">Finish auction</a>
             {% else %}
-                <form action="{%url 'bid' listing.id%}" method="post">
+                <form action="{%url 'bid' listing.id%}" method="post" id="bidsform">
                     {% csrf_token %}
                     <table>
                         {{ bidform.as_table }}
@@ -43,9 +56,9 @@
             {% endfor %}
     </div>
         <hr>
-        <div id="comments">
+        <div>
             <h5>Comments:</h5>
-            <form action="" method="post">
+            <form action="" method="post" id="commentsform">
                 {% csrf_token %}
                 <table>
                     {{ form.as_table }}

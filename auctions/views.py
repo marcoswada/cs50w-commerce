@@ -93,7 +93,7 @@ def listing(request, listing_id, ):
             obj.user = get_user(request)
             obj.comment = form.cleaned_data['comment']
             obj.save()
-            return HttpResponseRedirect(reverse('listing',args=(listing_id,))+"#comments")
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,))+"#commentsform")
         else:
             return render(request, "auctions/listing.html", context={ 
                 "listing": Listing.objects.get(id=listing_id),
@@ -179,9 +179,9 @@ def bid(request, listing_id):
             lst=Listing.objects.get(pk=listing_id)
             lst.currentPrice=form.cleaned_data['value']
             lst.save()
-            return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
+            return HttpResponseRedirect(reverse('listing',args=(listing_id,))+"#bidsform")
         else:
             # need to insert an error message here (invalid bid)
             print("\n\n\nInvalid bid\n\n\n")
             message="Your bid is lower than the current price"
-            return HttpResponseRedirect(reverse('listing', args=(listing_id,))+'?message='+message)
+            return HttpResponseRedirect(reverse('listing', args=(listing_id,))+'?message='+message+"#bidsform")
