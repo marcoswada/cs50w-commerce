@@ -21,11 +21,14 @@
         <div>
             {% if message %}
                 <script>
-                    $(document).ready(function(){
-
-                        //var x=document.getElementById("msgToast");
-                        //x.toast('show');
-                        $("#msgToast").toast('show');
+                    document.addEventListener("DOMContentLoaded", function(event) { 
+                        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                        var toastList = toastElList.map(function (toastEl) {
+                            return new bootstrap.Toast(toastEl, option)
+                        })
+                        var x=document.getElementById("msgToast");
+                        x.toast('show');
+                        //$("#msgToast").toast('show');
                     });
                 </script>
                 <div id="msgToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
