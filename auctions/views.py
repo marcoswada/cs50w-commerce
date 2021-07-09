@@ -159,9 +159,7 @@ def finish(request, listing_id):
             lst.save()
             return HttpResponseRedirect(reverse('listing',args=(listing_id,)))
         else:
-            # can't finish someone else's auction
             message="You can't finish someone else's auction"
-            print ("You can't finish someone else's auction")
             return HttpResponseRedirect(reverse('listing',args=(listing_id,))+'?message='+message)
 
     #return HttpResponse("not implemented yet")
@@ -181,7 +179,5 @@ def bid(request, listing_id):
             lst.save()
             return HttpResponseRedirect(reverse('listing',args=(listing_id,))+"#bidsform")
         else:
-            # need to insert an error message here (invalid bid)
-            print("\n\n\nInvalid bid\n\n\n")
             message="Your bid is lower than the current price"
             return HttpResponseRedirect(reverse('listing', args=(listing_id,))+'?message='+message+"#bidsform")
