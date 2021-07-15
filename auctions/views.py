@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 import datetime
 
-from auctions.models import User, Listing, Comment, Bid
+from auctions.models import User, Listing, Comment, Bid, Category
 from auctions.forms import ListingForm, CommentForm, BidForm
 
 def index(request):
@@ -181,3 +181,10 @@ def bid(request, listing_id):
         else:
             message="Your bid is lower than the current price"
             return HttpResponseRedirect(reverse('listing', args=(listing_id,))+'?message='+message+"#bidsform")
+
+def categories(request):
+    categories = Category.objects.all()
+    return render(request,"auctions/categories.html", {"categories": categories})
+
+def category(request, category_id):
+    pass
