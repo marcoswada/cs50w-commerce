@@ -29,6 +29,12 @@ def watchlist(request):
         "title": "My Watchlist",
     })
 
+def category(request, category_id):
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.filter(category__exact=category_id),
+        "title": "Items on " + Category.objects.get(pk=category_id).description + " category"
+    })
+
 def login_view(request):
     if request.method == "POST":
 
@@ -186,5 +192,3 @@ def categories(request):
     categories = Category.objects.all()
     return render(request,"auctions/categories.html", {"categories": categories})
 
-def category(request, category_id):
-    pass
