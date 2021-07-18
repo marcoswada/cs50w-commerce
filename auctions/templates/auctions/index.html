@@ -5,9 +5,7 @@
         <h2>{{ title }}</h2>
 
         {% for listing in listings %}
-            {% if listing.active %}
-                <li><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }}</a></li>
-            {% endif %}
+            <li><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }}</a></li>
         {% endfor %}
     {% endif %}
     

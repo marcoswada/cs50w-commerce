@@ -12,29 +12,34 @@ from auctions.forms import ListingForm, CommentForm, BidForm
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all(),
+        "listings": Listing.objects.filter(active__exact=True),
         "title": "Active Listings",
         })
 
 def mylistings(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(owner__exact=get_user(request)),
+        "listings": Listing.objects.filter(owner__exact=get_user(request)).filter(active__exact=True),
         "title": "My Listings",
     })
 
 
 def watchlist(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(watchedBy__in=[User.objects.get(username__exact=get_user(request)),]),
+        "listings": Listing.objects.filter(watchedBy__in=[User.objects.get(username__exact=get_user(request)),]).filter(active__exact=True),
         "title": "My Watchlist",
     })
 
 def category(request, category_id):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(category__exact=category_id),
+        "listings": Listing.objects.filter(category__exact=category_id).filter(active__exact=True),
         "title": "Items on " + Category.objects.get(pk=category_id).description + " category"
     })
 
+def finished(request):
+    return render(request,"auctions/index.html",{
+        "listings": Listing.objects.filter().filter(active__exact=False),
+        "title": "Finished auctions"
+    })
 def login_view(request):
     if request.method == "POST":
 
