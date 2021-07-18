@@ -12,7 +12,7 @@ from auctions.forms import ListingForm, CommentForm, BidForm
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.filter(active__exact=True),
+        "listings": Listing.objects.all(),
         "title": "Active Listings",
         })
 
@@ -128,12 +128,12 @@ def create(request):
         form=ListingForm(request.POST, request.FILES)
         if form.is_valid():
             xReq = Listing()
-            xReq.active = form.cleaned_data['active']
+            xReq.active = True
             xReq.title = form.cleaned_data['title']
             xReq.picture = form.cleaned_data.get('picture')
             xReq.description = form.cleaned_data['description']
             xReq.initialPrice = form.cleaned_data['initialPrice']
-            xReq.currentPrice = form.cleaned_data['currentPrice']
+            xReq.currentPrice = xReq.initialPrice
             xReq.creationDate = datetime.datetime.now()
             xReq.category = form.cleaned_data['category']
             xReq.owner = User.objects.get(username=get_user(request))
