@@ -20,7 +20,9 @@
         <hr>
         <div>
             {% if isowner %}
-                <a href="{% url 'finish' listing.id %}">Finish auction</a>
+                {% if listing.active %}
+                    <a href="{% url 'finish' listing.id %}">Finish auction</a>
+                {% endif %}
             {% else %}
                 <form action="{%url 'bid' listing.id%}" method="post" id="bidsform">
                     {% csrf_token %}
@@ -83,14 +85,16 @@
         <hr>
         <div>
             <h5>Comments:</h5>
-            <form action="" method="post" id="commentsform">
-                {% csrf_token %}
-                <table>
-                    {{ form.as_table }}
-                </table>
-                <input type="submit" value="Submit">
-            </form>
-            <hr>
+            {% if listing.active %}
+                <form action="" method="post" id="commentsform">
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                    <input type="submit" value="Submit">
+                </form>
+                <hr>
+            {% endif %}
             {% for comment in comments %}
                 <div>
                     <b>{{ comment.user }}</b><i>({{ comment.timestamp }})</i>:
