@@ -1,0 +1,122 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Auctions</title>
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="/static/auctions/styles.css" rel="stylesheet">
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+    </head>
+    <body>
+        <h1>Auctions</h1>
+        <div>
+            
+                Signed in as <strong>admin</strong>.
+            
+        </div>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Active Listings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/categories">Browse by category</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/mylistings">My Listings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/watchlist">My watchlist</a>
+            </li>
+            <li>
+                <a class="nav-link" href="/create">New Listing</a>
+            </li>
+            <li>
+                <a class="nav-link" href="/finished">Finished auctions</a>
+            </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Log Out</a>
+                </li>
+            
+        </ul>
+        <hr>
+        
+    
+        <h2>
+            Listing 3: Jeans
+            <a href="/watch/3"><img src= "/static/auctions/star-off.svg"  width="30px" height="30px"/></a>
+        </h2>
+        <div class="content123">
+            <p><b>Category:</b> Computers</p>
+            <p><b>Listed by:</b> admin</p>
+            <p><b>Date:</b> June 9, 2021, 9 a.m.</p>
+            <img src=/media/pictures/6939957-jeans-texture.jpg sizes="640x480">
+            <p>/media/pictures/6939957-jeans-texture.jpg</p>
+            <h3>Description:</h3>
+            <p>Textura jeans em jpg</p>
+            <p><b>Initial price:</b> $2.50</p>
+            <p><b>Current price:</b> $2.50</p>
+        </div>
+        <hr>
+        <div>
+            
+                
+                    <a href="/finish/3">Finish auction</a>
+                
+            
+
+            
+            
+                <div>
+                    <b>marcos</b><i>(July 1, 2021, 2:17 a.m.)</i>:
+                    <p>3.00</p>
+                </div>
+            
+                <div>
+                    <b>marcos</b><i>(July 1, 2021, 2:14 a.m.)</i>:
+                    <p>13.00</p>
+                </div>
+            
+    </div>
+        <hr>
+        <div>
+            <h5>Comments:</h5>
+            
+                <form action="" method="post" id="commentsform">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="Zu2QDLZX55fCatCe7fDZKodgcliHvtUQ6h0yCiZ4Ojll4PJbLQkTz7ZzzRTpnZHW">
+                    <table>
+                        <tr><th><label for="id_comment">Comment:</label></th><td><input type="text" name="comment" maxlength="255" required id="id_comment"></td></tr>
+                    </table>
+                    <input type="submit" value="Submit">
+                </form>
+                <hr>
+            
+            
+                <div>
+                    <b>admin</b><i>(July 19, 2021, 6:48 a.m.)</i>:
+                    <p>jhwbhdb</p>
+                </div>
+                <hr>
+            
+                <div>
+                    <b>admin</b><i>(July 10, 2021, 2:51 a.m.)</i>:
+                    <p>dfbgdgfv</p>
+                </div>
+                <hr>
+            
+                <div>
+                    <b>marcos</b><i>(June 13, 2021, 2:47 a.m.)</i>:
+                    <p>1</p>
+                </div>
+                <hr>
+            
+        </div>
+    
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    </body>
+</html>
