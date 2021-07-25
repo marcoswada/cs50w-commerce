@@ -2,116 +2,147 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        <div class="row">
-            <h2>
-                Listing {{ listing.id }}: {{ listing.title }}
-                <a href="{% url 'watch' listing.id %}"><img src={% if starred %} "/static/auctions/star-on.svg" {% else %} "/static/auctions/star-off.svg" {% endif %} width="30px" height="30px"/></a>
-            </h2>
-        </div>
-        <div class="row">
-            <div class="col">
-                <img src={{ listing.picture.url }} width="100%" height="auto">
-                <p><b>Category:</b> {{ listing.category }}</p>
-            </div>
-            <div class="col">
-                <p><b>Listed by:</b> {{ listing.owner }}</p>
-                <p><b>Date:</b> {{ listing.creationDate }}</p>
-                <p>{{ listing.picture.url }}</p>
-                <h3>Description:</h3>
-                <p>{{ listing.description }}</p>
-                <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>
-                <p><b>Current price:</b> ${{ listing.currentPrice }}</p>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
-                {% if isowner %}
-                    {% if listing.active %}
-                        <a href="{% url 'finish' listing.id %}">Finish auction</a>
-                    {% endif %}
-                {% else %}
-                    <form action="{%url 'bid' listing.id%}" method="post" id="bidsform">
-                        {% csrf_token %}
-                        <table>
-                            {{ bidform.as_table }}
-                        </table>
-                        <input type="submit" value="Bid">
-                    </form>
-                {% endif %}
-            </div>
-            <div>
-                {% if message %}
-                    <script>
+        <div class="container-fluid">
+            {% if not listing.active %}
 
-                        document.addEventListener("DOMContentLoaded", function(event) { 
-                        //var x = new bootstrap.Toast(document.getElementById("liveToast"), "show");
-                        var option;
-                        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-                        var toastList = toastElList.map(function (toastEl) {
-                            return new bootstrap.Toast(toastEl, option);
-                        });
-                        var myToastEl = document.getElementById('msgToast')
-                        var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
-                        var liveToast =bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'))
-                        myToast.show();
-                        //liveToast.show();
-                        });
-                    </script>
-                
-                    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
-                        <div id="msgToast" class="toast align-items-center text-white bg-danger border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="d-flex">
-                            <div class="toast-body">
-                                {{ message }}
-                            </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function(event) { 
+                    var myToastEl = document.getElementById('msgToast')
+                    var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
+                    myToast.show();
+                    });
+                </script>
+            
+                <div class="position-fixed top-50 start-50 translate-middle-x p-3" style="z-index: 11">
+                    <div id="msgToast" class="toast align-items-center text-white bg-black border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                        <div class="toast-body">
+                            <svg class="bi text-success" width="64" height="64" fill="currentColor">
+                                <use xlink:href="bootstrap-icons.svg#hammer"/>
+                            </svg>
+                            This auction is finished and you are (not) the winner!                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                     </div>
-                    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
-                        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header">
-                                <img src="..." class="rounded me-2" alt="...">
-                                <strong class="me-auto">Bootstrap</strong>
-                                <small>11 mins ago</small>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body">
-                                {{ message }}
+                </div>
+
+                <!--
+                <div class="overlap overlap-2">
+                    This auction is finished and you are (not) the winner!
+                </div>
+                -->
+            {% endif %}
+            <div class="row overlap overlap-1">
+                <h2>
+                    Listing {{ listing.id }}: {{ listing.title }}
+                    <a href="{% url 'watch' listing.id %}"><img src={% if starred %} "/static/auctions/star-on.svg" {% else %} "/static/auctions/star-off.svg" {% endif %} width="30px" height="30px"/></a>
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src={{ listing.picture.url }} width="100%" height="auto">
+                    <p><b>Category:</b> {{ listing.category }}</p>
+                </div>
+                <div class="col">
+                    <p><b>Listed by:</b> {{ listing.owner }}</p>
+                    <p><b>Date:</b> {{ listing.creationDate }}</p>
+                    <p>{{ listing.picture.url }}</p>
+                    <h3>Description:</h3>
+                    <p>{{ listing.description }}</p>
+                    <p><b>Initial price:</b> ${{ listing.initialPrice }}</p>
+                    <p><b>Current price:</b> ${{ listing.currentPrice }}</p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    {% if isowner %}
+                        {% if listing.active %}
+                            <a href="{% url 'finish' listing.id %}">Finish auction</a>
+                        {% endif %}
+                    {% else %}
+                        <form action="{%url 'bid' listing.id%}" method="post" id="bidsform">
+                            {% csrf_token %}
+                            <table>
+                                {{ bidform.as_table }}
+                            </table>
+                            <input type="submit" value="Bid">
+                        </form>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if message %}
+                        <script>
+
+                            document.addEventListener("DOMContentLoaded", function(event) { 
+                            //var x = new bootstrap.Toast(document.getElementById("liveToast"), "show");
+                            //var option;
+                            //var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+                            //var toastList = toastElList.map(function (toastEl) {
+                            //    return new bootstrap.Toast(toastEl, option);
+                            //});
+                            var myToastEl = document.getElementById('msgToast')
+                            var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) // Returns a Bootstrap toast instance
+                            myToast.show();
+                            });
+                        </script>
+                    
+                        <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
+                            <div id="msgToast" class="toast align-items-center text-white bg-danger border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="col">
-                {% for bid in bids %}
-                    <div>
-                        <b>{{ bid.bidder }}</b><i>({{ bid.bidDate }})</i>:
-                        <p>{{ bid.value }}</p>
-                    </div>
-                {% endfor %}
-                <hr>
-            </div>
-            <div class="col">
-                <h5>Comments:</h5>
-                {% if listing.active %}
-                    <form action="" method="post" id="commentsform">
-                        {% csrf_token %}
-                        <table>
-                            {{ form.as_table }}
-                        </table>
-                        <input type="submit" value="Submit">
-                    </form>
+                        <!--
+                        <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
+                            <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <img src="..." class="rounded me-2" alt="...">
+                                    <strong class="me-auto">Bootstrap</strong>
+                                    <small>11 mins ago</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% for bid in bids %}
+                        <div>
+                            <b>{{ bid.bidder }}</b><i>({{ bid.bidDate }})</i>:
+                            <p>{{ bid.value }}</p>
+                        </div>
+                    {% endfor %}
                     <hr>
-                {% endif %}
-                {% for comment in comments %}
-                    <div>
-                        <b>{{ comment.user }}</b><i>({{ comment.timestamp }})</i>:
-                        <p>{{ comment.comment }}</p>
-                    </div>
-                    <hr>
-                {% endfor %}
+                </div>
+                <div class="col">
+                    <h5>Comments:</h5>
+                    {% if listing.active %}
+                        <form action="" method="post" id="commentsform">
+                            {% csrf_token %}
+                            <table>
+                                {{ form.as_table }}
+                            </table>
+                            <input type="submit" value="Submit">
+                        </form>
+                        <hr>
+                    {% endif %}
+                    {% for comment in comments %}
+                        <div>
+                            <b>{{ comment.user }}</b><i>({{ comment.timestamp }})</i>:
+                            <p>{{ comment.comment }}</p>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
             </div>
         </div>    
     {% endif %}
