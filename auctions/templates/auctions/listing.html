@@ -12,20 +12,42 @@
                     myToast.show();
                     });
                 </script>
-            
+
+                {% if winning_bidder %}
+                    <div class="position-fixed top-50 start-50 translate-middle-x p-3" style="z-index: 11">
+                        <div id="msgToast" class="toast align-items-center text-white bg-success border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                            <div class="d-flex">
+                            <div class="toast-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <img src="/static/auctions/party-popper.svg">
+                                    </div>
+                                    <div class ="col-8">
+                                        This auction is finished and you are the winner!                        </div>
+                                    </div>
+                                </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
                 <div class="position-fixed top-50 start-50 translate-middle-x p-3" style="z-index: 11">
-                    <div id="msgToast" class="toast align-items-center text-white bg-black border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div id="msgToast" class="toast align-items-center text-white bg-secondary border-0 position-relative top-200 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
                         <div class="d-flex">
                         <div class="toast-body">
-                            <svg class="bi text-success" width="64" height="64" fill="currentColor">
-                                <use xlink:href="bootstrap-icons.svg#hammer"/>
-                            </svg>
-                            This auction is finished and you are (not) the winner!                        </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="/static/auctions/hammer.svg">
+                                </div>
+                                <div class ="col-8">
+                                    This auction is finished and you are not the winner!                        </div>
+                                </div>
+                            </div>
                         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                     </div>
                 </div>
-
+            {% endif %}
                 <!--
                 <div class="overlap overlap-2">
                     This auction is finished and you are (not) the winner!

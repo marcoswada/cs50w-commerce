@@ -96,6 +96,10 @@ def listing(request, listing_id, ):
     starred=usr in Listing.objects.get(pk=listing_id).watchedBy.all()
     isowner = (get_user(request)==Listing.objects.get(pk=listing_id).owner)
     message=request.GET.get('message', None)
+    if Listing.objects.get(pk=listing_id).bid_set.count()==0:
+        winning_bidder=False
+    else:
+        winning_bidder=Listing.objects.get(pk=listing_id).bid_set.order_by("-value")[0].bidder==get_user(request)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -115,6 +119,7 @@ def listing(request, listing_id, ):
                 "bidform": BidForm(listing_id),
                 "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
                 "message": message,
+                "winning_bidder": winning_bidder,
                  })
     else:
         return render(request, "auctions/listing.html",{
@@ -126,6 +131,7 @@ def listing(request, listing_id, ):
             "bidform": BidForm(listing_id),
             "bids": Bid.objects.filter(item=listing_id).order_by("-bidDate"),
             "message": message,
+            "winning_bidder": winning_bidder,
     })
 
 def create(request):

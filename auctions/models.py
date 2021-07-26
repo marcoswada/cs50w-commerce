@@ -3,7 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    #username = models.CharField(max_length=150, primary_key=True)
     pass
 
 class Category(models.Model):
@@ -42,7 +41,3 @@ class Comment(models.Model):
     comment = models.CharField(max_length=255, blank=False, null=False)
     def __str__(self):
         return(f"({ self.id }) { self.item } { self.user }: { self.comment }")
-
-#class Watchlist(models.Model):
-#    user = models.ForeignKey(User, on_delete=models.PROTECT)
-#    item = models.ForeignKey(Listing, on_delete=models.PROTECT)

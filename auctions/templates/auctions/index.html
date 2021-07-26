@@ -3,10 +3,30 @@
 {% block body %}
     {% if user.is_authenticated %}
         <h2>{{ title }}</h2>
-
-        {% for listing in listings %}
-            <li><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }}</a></li>
-        {% endfor %}
+        <table> 
+            <tr>
+                <th>Picture</th>
+                <th>Description</th>
+                <th>Current Price</th>
+            </tr>
+            {% for listing in listings %}
+                <tr>
+                    <td align="center">
+                        <a href="{% url 'listing' listing.id %}">
+                            <img height="100px" width="auto" src="{{ listing.picture.url }}" alt="">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'listing' listing.id %}">
+                            Listing {{ listing.id }}: {{ listing.title }}
+                        </a>
+                    </td>
+                    <td align="right">
+                        {{ listing.currentPrice }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
     
 {% endblock %}
