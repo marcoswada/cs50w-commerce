@@ -7,6 +7,7 @@
             <thead>
                 <tr>
                     <th>Picture</th>
+                    <th>Title</th>
                     <th>Description</th>
                     <th>Current Price</th>
                 </tr>
@@ -23,7 +24,12 @@
                         </td>
                         <td>
                             <a href="{% url 'listing' listing.id %}">
-                                Listing {{ listing.id }}: {{ listing.title }}
+                                {{ listing.title }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'listing' listing.id %}">
+                                {{ listing.description }}
                             </a>
                         </td>
                         <td align="right">

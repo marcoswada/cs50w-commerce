@@ -22,7 +22,7 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     initialPrice = models.DecimalField(max_digits=10, decimal_places=2)
     currentPrice = models.DecimalField(max_digits=10, decimal_places=2)
-    watchedBy = models.ManyToManyField(User)
+    watchedBy = models.ManyToManyField(User, blank=True)
     def __str__(self):
         return (f"({ self.id }) { self.title }")
 
